@@ -1,12 +1,17 @@
-:page-layout: doc
-:page-doc-category: Reference
-:page-title: Jenkins Integration with Kabanero
-:sectanchors:
+---
+permalink: /guides/jenkins-integration-with-kabanero/
+---
+:page-layout: guide
+:page-duration: 20 minutes
+:page-releasedate: 2019-10-22
+:page-description: A guide on how an existing jenkins user can integrate with Kabanero.
+:page-tags: ['Jenkins', 'Kabanero', 'Tekton', 'CI/CD']
+:page-guide-category: n/a
 = Jenkins Integration with Kabanero
 
 The goal of this guide is to show existing Jenkins users how to use Tekton to build images from their code repository and have Jenkins deploy using the image. The flow looks something like this:
 
-image::/docs/img/jenkins-tekton.png[]
+image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="Architectural Setup of this Guide"]
 
 == Prerequisites
 In order to follow along with this hands-on guide, you’ll need the following pre-requisites:
@@ -27,11 +32,11 @@ The script to create a pipeline is included with Kabanero-pipelines project. Thi
 
 From the bottom-half of the file pipelines/incubator/build-deploy-pipeline.yaml, remove the highlighted section (i.e. the deploy-task). Save and close the file. Rename the file to test-build-pipeline.yaml.
 
-image::/docs/img/test-build-pipeline.png[]
+image::/img/guide/test-build-pipeline.png[link="/img/guide/test-build-pipeline.png" alt="Test Build Pipeline"]
 
 For our example, we’ll be using nodejs-build-task for “build-task” section and name the pipeline test-build-pipeline. Once finished, your file should look like following:
 
-image::/docs/img/build-task.png[]
+image::/img/guide/build-task.png[link="/img/guide/build-task.png" alt="Build Task"]
 
 Let’s create the pipeline by invoking the following command: _oc apply -f test-build-pipeline.yaml -n Kabanero_. Notice the -n Kabaneropart which indicates the namespace Kabanero where the pipeline will be created. Note: Change the names on lines 5, 15,25 (the ‘name’ fields) in the template file to lowercase letter only names.  The taskRef name must be one of the tasks installed in the OpenShift cluster.  Here, we’re using "nodejs-epress-build-task".
 
