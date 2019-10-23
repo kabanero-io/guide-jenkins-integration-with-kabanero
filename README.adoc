@@ -14,11 +14,11 @@ The goal of this guide is to show existing Jenkins users how to use Tekton to bu
 image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt=""]
 
 == Prerequisites
-In order to follow along with this hands-on guide, you’ll need the following pre-requisites:
-* OpenShift 3.11 
-* Kabanero Foundation (cloned)
-* Kabanero Pipelines (cloned)
-* Appsody (installed)
+In order to follow along with this hands-on guide, you’ll need the following pre-requisites: +
+* OpenShift 3.11 +
+* Kabanero Foundation (cloned) +
+* Kabanero Pipelines (cloned) +
+* Appsody (installed) +
 ** Links to each of the above projects are given under reference section. Each project website/github listsnecessary system requirements.
 
 == Intended Audience:
