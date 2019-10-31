@@ -113,7 +113,7 @@ oc apply -f test-build-pipeline.yaml -n Kabanero
 
 In the command, the `-n` indicates the Kabanero namespace where the pipeline is created.
 
-=== Create the PipelineRun binary
+=== Create a PipelineRun binary
 *Note:* You can use a project of your choice to complete this guide. If you don’t have a project yet, run the `appsody init nodejs-express` command to get a sample Node.js - Express application.
 
 Go to the Kabanero Foundation project that you cloned and open the `scripts/appsody-Tekton-example-manual-run.sh` file. In this file, edit the `DOCKER_IMAGE` and `APP_REPO` parameters to reflect the code repository and image repository of your choice. For this example, use the Docker repository on OpenShift.
