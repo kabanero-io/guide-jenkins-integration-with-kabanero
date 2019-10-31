@@ -147,7 +147,7 @@ Run the following command to display the PipelineRun execution steps:
 oc get pipelinerun -o yaml
 ----
 
-If the `pipeline-run` command fails at `validate-collection-is-activestep`, remove the `appsody/nodejs-express:<ver>` value and add the `Kabanero/nodejs-express:<ver>` value in the `appsody-config.yaml` file under the Appsody project.
+If the `pipeline-run` command fails at the `validate-collection-is-active` step, remove the `appsody/nodejs-express:<ver>` value and add the `Kabanero/nodejs-express:<ver>` value in the `appsody-config.yaml` file under the Appsody project.
 
 This problem is a known issue for projects that are created by using the `appsody-init` command.
 
