@@ -144,7 +144,7 @@ oc get pipelinerun
 
 Run the following command to display the PipelineRun execution steps:
 ----
-oc get pipelinerun-o yaml
+oc get pipelinerun -o yaml
 ----
 
 If the `pipeline-run` command fails at `validate-collection-is-activestep`, remove the `appsody/nodejs-express:<ver>` value and add the `Kabanero/nodejs-express:<ver>` value in the `appsody-config.yaml` file under the Appsody project.
