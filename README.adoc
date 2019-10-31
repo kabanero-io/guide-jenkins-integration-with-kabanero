@@ -70,7 +70,7 @@ spec:
   tasks:
     - name: build-task
       taskRef:
-        name: CollectiionId-build-task
+        name: CollectionId-build-task
       resources:
       inputs:
         - name: git-source
