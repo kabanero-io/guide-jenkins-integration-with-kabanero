@@ -45,7 +45,7 @@ You need the following prerequisites to complete the guide:
 See each project's documentation for necessary system requirements.
 
 == Intended audience
-This guide is for anyone who has experience with Jenkins and is familiar with the fundamental concepts of microservices, Docker, Kubernetes, OpenShift, and Tekton. The purpose of the guide is to show an existing Jenkins user or administrator how to build an image by using Tekton and how to deploy an image with Jenkins.
+This guide is for anyone who has experience with Jenkins and is familiar with the fundamental concepts of microservices, Docker, Kubernetes, OpenShift, and Tekton. The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins.
 
 == Build an image with Tekton
 
