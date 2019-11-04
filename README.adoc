@@ -21,7 +21,7 @@ permalink: /guides/jenkins-integration-with-kabanero/
 :page-description: Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 :page-tags: ['Tekton', 'Jenkins', 'CI/CD', 'Collection']
 :page-guide-category: collections
-:source-highlighter: pygments
+:source-highlighter: coderay
 = Jenkins integration with Kabanero
 
 Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
@@ -55,7 +55,7 @@ The script to create a pipeline is included with the Kabanero Pipelines project.
 Go to the `kabanero-pipelines` folder that you recently cloned. Find the `pipelines/incubator/build-deploy-pipeline.yaml` file, and remove the section of the file that is highlighted:
 
 // image::/img/guide/test-build-pipeline.png[link="/img/guide/test-build-pipeline.png" alt=""]
-[source,yaml,highlight=81..90]
+[source,yaml,linenums,highlight=81..90]
 ----
 apiVersion: Tekton.dev/v1alpha1
 kind: Pipeline
