@@ -21,7 +21,6 @@ permalink: /guides/jenkins-integration-with-kabanero/
 :page-description: Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 :page-tags: ['Tekton', 'Jenkins', 'CI/CD', 'Collection']
 :page-guide-category: collections
-:source-highlighter: pygments
 = Jenkins integration with Kabanero
 
 Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
@@ -52,32 +51,10 @@ This guide is for anyone who has experience with Jenkins and is familiar with th
 === Create a pipeline
 The script to create a pipeline is included with the Kabanero Pipelines project. This template script contains both build and deployment tasks, but you will remove the deployment task from the file so that Tekton performs only the build task.
 
-Go to the `kabanero-pipelines` folder that you recently cloned. Find the `pipelines/incubator/build-deploy-pipeline.yaml` file, and remove the section of the file that is highlighted:
+Go to the `kabanero-pipelines` folder that you recently cloned. Find the `pipelines/incubator/build-deploy-pipeline.yaml` file, and delete the following section of the file:
 
-// image::/img/guide/test-build-pipeline.png[link="/img/guide/test-build-pipeline.png" alt=""]
-[source,yaml,highlight=81..90]
+[source,yaml]
 ----
-apiVersion: Tekton.dev/v1alpha1
-kind: Pipeline
-metadata:
-  name: CollectionId-build-deploy-pipeline
-spec:
-  resources:
-    - name: git-source
-      type: git
-    - name: docker-image
-      type: image
-  tasks:
-    - name: build-task
-      taskRef:
-        name: CollectionId-build-task
-      resources:
-      inputs:
-        - name: git-source
-          resource: git-source
-      outputs:
-        - name: docker-image
-          resource: docker-image
     - name: deploy-task
       taskRef:
         name: CollectionId-deploy-task
