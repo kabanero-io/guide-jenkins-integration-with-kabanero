@@ -27,7 +27,8 @@ Learn how to use Tekton to build an image and how to use Jenkins to deploy an ap
 
 The following diagram depicts the relationship and flow between Tekton and Jenkins:
 
-image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt=""]
+image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between Tekton and Jenkins."]
+{empty} +
 
 == Prerequisites
 You need the following prerequisites to complete the guide:
@@ -71,7 +72,6 @@ You removed the deployment task. Save and close the file. Rename the file to `te
 
 In the `test-build-pipeline.yaml` file, update the name of the build task to `nodejs-express-build-task`. The taskRef name must be one of the tasks that is installed in the OpenShift cluster. Then, update the pipeline name to `test-build-pipeline`. After you make these changes, your file looks like following example:
 
-// image::/img/guide/build-task.png[link="/img/guide/build-task.png" alt=""]
 [source,yaml]
 ----
 apiVersion: Tekton.dev/v1alpha1
@@ -109,7 +109,7 @@ In the command, the `-n` indicates the Kabanero namespace where the pipeline is 
 
 Go to the Kabanero Foundation project that you cloned and open the `scripts/appsody-Tekton-example-manual-run.sh` file. In this file, edit the `DOCKER_IMAGE` and `APP_REPO` parameters to reflect the code repository and image repository of your choice. For this example, use the Docker repository on OpenShift.
 
-Run the following command to create a PiplineRun binary:
+Run the following command to create a PipelineRun binary:
 ----
 ./appsody-Tekton-example-manual-run.sh
 ----
@@ -124,7 +124,7 @@ Run the following command to display the PipelineRun execution steps:
 oc get pipelinerun -o yaml
 ----
 
-If the `pipeline-run` command fails at the `validate-collection-is-active` step, remove the `appsody/nodejs-express:<ver>` value and add the `Kabanero/nodejs-express:<ver>` value in the `appsody-config.yaml` file under the Appsody project.
+If the PipelineRun fails at the `validate-collection-is-active` step, remove the `appsody/nodejs-express:<ver>` value and add the `Kabanero/nodejs-express:<ver>` value in the `appsody-config.yaml` file under the Appsody project.
 
 This problem is a known issue for projects that are created by using the `appsody-init` command.
 
@@ -139,7 +139,7 @@ Use the Jenkinsfile template from the reference section of this guide, and chang
 === Create a deploy file
 On your local environment where Appsody is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
 ----
-runappsody-deploy –-generate-only
+appsody-deploy –-generate-only
 ----
 
 Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using `app-deploy.yaml` file.
