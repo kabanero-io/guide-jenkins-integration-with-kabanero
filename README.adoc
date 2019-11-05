@@ -28,7 +28,6 @@ Learn how to use Tekton to build an image and how to use Jenkins to deploy an ap
 The following diagram depicts the relationship and flow between Tekton and Jenkins:
 
 image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between Tekton and Jenkins."]
-{empty} +
 
 == Prerequisites
 You need the following prerequisites to complete the guide:
