@@ -17,17 +17,17 @@ permalink: /guides/jenkins-integration-with-kabanero/
 //
 :page-layout: guide
 :page-duration: 30 minutes
-:page-releasedate: 2019-11-13
+:page-releasedate: 2019-11-20
 :page-description: Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 :page-tags: ['Tekton', 'Jenkins', 'CI/CD', 'Pipeline', 'Kabanero']
 :page-guide-category: collections
 = Jenkins integration with Kabanero
 
-Kabanero provides a modern DevOps toolchain with pre-built pipelines using an open source project called Tekton. The Tekton project provides Kubernetes-style resources for declaring CI/CD-style pipelines. While it is advantagous to run both CI and CD using Tekton to leverage the power of Kubernetes to manage your toolchain, some may want to reuse Jenkins assets or skills.
+Kabanero delivers a modern DevOps toolchain with pre-built Tekton pipelines. The Tekton open source project provides Kubernetes-style resources for declaring CI/CD-style pipelines. While it is advantageous to run both CI and CD with Tekton to leverage the power of Kubernetes, some might want to reuse Jenkins assets or skills.
 
-With Kabanero, you can customize the deploy section of the pipeline to use Jenkins.
+With Kabanero, you can customize the deployment section of the pipeline to use Jenkins.
 
-In this guide you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
+In this guide, you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 
 The following diagram depicts the relationship and flow between Tekton and Jenkins:
 
@@ -50,7 +50,7 @@ See each project's documentation for necessary system requirements.
 == Intended audience
 The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins.
 
-Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton. 
+Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
 
 == Build an image with Tekton
 
