@@ -23,6 +23,8 @@ permalink: /guides/jenkins-integration-with-kabanero/
 :page-guide-category: collections
 = Jenkins integration with Kabanero
 
+// *** For Alan's review ***
+
 Kabanero delivers a modern DevOps toolchain with pre-built Tekton pipelines. The Tekton open source project provides Kubernetes-style resources for declaring CI/CD-style pipelines. While it is advantageous to run both CI and CD with Tekton to leverage the power of Kubernetes, some might want to reuse Jenkins assets or skills.
 
 With Kabanero, you can customize the deployment section of the pipeline to use Jenkins.
