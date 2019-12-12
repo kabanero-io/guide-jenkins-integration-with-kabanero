@@ -158,20 +158,23 @@ Create a Jenkins (Ephemeral) instance from the OpenShift Catalog. Create a proje
 Go to Application -> Deployment in your OpenShift portal to see the successful deployment. You can also see the URL of running application by going to Application -> Deployment -> Routes.
 
 == Reference
-* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide:
+* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. You'll need to adjust environment variables tagged 'envVar' that reflects your project:
 ----
-podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'appsody-sa', containers: [
-    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat')
+podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'kabanero-pipeline', containers: [
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat',
+                      envVars: [ envVar(key: 'TAG', value: 'cbc2f7c'),
+                                envVar(key: 'IMAGENAME', value: 'appsodyjava'),
+                               envVar(key: 'PROJECT', value: 'kabanero')])
   ]){
     node('label') {
         stage('Deploy') {
             container('kubectl') {
                 checkout scm
-                sh 'sed -i -e \'s#applicationImage: .*$#applicationImage: docker-registry.default.svc:5000/Kabanero/project1#g\' app-deploy.yaml'
+                sh 'sed -i -e \'s#applicationImage: .*$#applicationImage: image-registry.openshift-image-registry.svc:5000/\'$PROJECT\'/\'$IMAGENAME\':\'$TAG\'#g\' app-deploy.yaml'
                 sh 'cat app-deploy.yaml'
                 sh 'find . -name app-deploy.yaml -type f|xargs kubectl apply -f'
             }
-        }
-    }
+        }   
+    }    
 }
 ----
