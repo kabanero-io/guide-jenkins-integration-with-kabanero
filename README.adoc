@@ -23,13 +23,11 @@ permalink: /guides/jenkins-integration-with-kabanero/
 :page-guide-category: collections
 = Jenkins integration with Kabanero
 
-// *** For Alan's review ***
-
 Kabanero delivers a modern DevOps toolchain with pre-built Tekton pipelines. The Tekton open source project provides Kubernetes-style resources for declaring CI/CD-style pipelines. While it is advantageous to run both CI and CD with Tekton to leverage the power of Kubernetes, some might want to reuse Jenkins assets or skills.
 
 With Kabanero, you can customize the deployment section of the pipeline to use Jenkins.
 
-In this guide, you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
+In this guide, you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image. Tekton pipelines are created manually in this guide. A separate guide will address how to use automated webhooks to create and run Tekton pipelines.
 
 The following diagram depicts the relationship and flow between Tekton and Jenkins:
 
@@ -175,3 +173,4 @@ podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'appsody-sa', co
     }
 }
 ----
+* This guide has been tested on the following product versions: OpenShift 4.2 Platform, Kabanero Foundation 0.3.1, Tekton 0.7, Jenkins ver. 2.176.3
