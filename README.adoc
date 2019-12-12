@@ -173,4 +173,4 @@ podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'appsody-sa', co
     }
 }
 ----
-* This guide has been tested on the following product versions: OpenShift 4.2 Platform, Kabanero Foundation 0.3.1, Tekton 0.7, Jenkins ver. 2.176.3
+* This guide has been tested on the following product versions: OKD 3.11 Platform, Kabanero Foundation 0.3.1, Tekton 0.7, Jenkins ver. 2.176.3
