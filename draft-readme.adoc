@@ -47,11 +47,42 @@ You need the following prerequisites to complete the guide:
 See each project's documentation for necessary system requirements.
 
 == Intended audience
-The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins.
+The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
 
-Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
+When building the image, you can follow one of the two methods mentioned below - either via automated webhook or by manual pipeline creation.
 
-== Build an image with Tekton
+== Build an image with Tekton via Automated Webhook
+
+* Log in as cluster-admin in the master node of your OKD Cluster. The following steps consider that you are logged in as cluster-admin and the commands are run on the master node of your OKD cluster.
+* While logged in as a cluster-admin, execute the install script from the kabanero-operator link:https://github.com/kabanero-io/kabanero-foundation[release]. For example, at the time of writing this guide, the command is: 
+----
+curl -s -L https://github.com/kabanero-io/kabanero-operator/releases/download/0.3.2/install.sh | bash
+----
+* Create an instance of Kabanero CR by invoking the command you'll see as output near the end of the above installation script. For example, for Kabanero Foundation 0.3.2, the command is as following:
+----
+oc apply -n kabanero -f https://raw.githubusercontent.com/kabanero-io/kabanero-operator/0.3.2/config/samples/default.yaml 
+----
+* Find out Tekton Dashboard URL by invoking the following command:
+----
+kubectl get routes -n tekton-pipelines
+----
+The output should look something like:
+----
+NAME               HOST/PORT                                                         PATH   SERVICES           PORT           
+tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.com          tekton-dashboard   <all>   
+----
+This is the URL of your Tekton dashboard where you can create the webhook.
+
+* From Tekton Dashboard, navigate to Webhooks and click on the '+' sign "Create Webhook".
+* Under "Webhook Settings", give your webhook a name, a repository URL and access token. The webhook name can be anything. For this example, we'll using a Java MicroProfile pipeline and thus, your codebase should be Java-MicroProfile based. If you don't have one, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a Personal Access Token for GitHub, follow link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[this link]
+* Under "Target Pipeline Settings", select "Kabanero" namespace, "java-microprofile-build-push-pipeline" Pipeline, "kabanero-operator" Service Account, your Docker Registry URL in the form index.docker.io/<yourDockerUsername> 
+* Go to PipelineRuns tab. If you haven't created PipelineRuns already, the list should be empty.
+* On your GitHub, go to Settings-->Webhooks. You should see newly created webhook which was created by the Tekton Dashboard. 
+* Now make any code change on your repository and push. Wait few moments and you should see a PipelineRun kick off under PipelineRuns tab on your Tekton Dashboard.
+* Once the PipelineRun finishes successfully, log in to your Docker Registry and find the newly created image. The image will reside under a repository with the same name as your GitHub repository.
+
+ 
+== Build an image with Tekton by manual pipeline creation
 
 === Create a pipeline
 The script to create a pipeline is included with the Kabanero Pipelines project. This template script contains both build and deployment tasks, but you will remove the deployment task from the file so that Tekton performs only the build task.
