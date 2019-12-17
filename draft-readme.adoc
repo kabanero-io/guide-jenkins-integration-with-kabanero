@@ -105,11 +105,11 @@ Create a Jenkins (Ephemeral) instance from the OpenShift Catalog. Create a proje
 Go to Application -> Deployment in your OpenShift portal to see the successful deployment. You can also see the URL of running application by going to Application -> Deployment -> Routes.
 
 == Reference
-* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. The user will need to adjust these values: *envVars: [ envVar(key: 'TAG', value: 'cbc2f7c'), envVar(key: 'IMAGENAME', value: 'appsodyjava'), envVar(key: 'PROJECT', value: 'kabanero')])*
+* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. The user will need to adjust these values: *envVars: [ envVar(key: 'TAG', value: 'cbc2f7c'), envVar(key: 'IMAGENAME', value: 'java-microprofile'), envVar(key: 'PROJECT', value: 'kabanero')])*
 ----
 podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'kabanero-pipeline', containers: [
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat',
-                      envVars: [ envVar(key: 'TAG', value: 'cbc2f7c'),
+                      envVars: [ envVar(key: 'TAG', value: 'latest'),
                                 envVar(key: 'IMAGENAME', value: 'appsodyjava'),
                                envVar(key: 'PROJECT', value: 'kabanero')])
   ]){
