@@ -17,7 +17,7 @@ permalink: /guides/jenkins-integration-with-kabanero/
 //
 :page-layout: guide
 :page-duration: 30 minutes
-:page-releasedate: 2019-11-20
+:page-releasedate: 2019-12-18
 :page-description: Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 :page-tags: ['Tekton', 'Jenkins', 'CI/CD', 'Pipeline', 'Kabanero']
 :page-guide-category: collections
@@ -27,7 +27,8 @@ Kabanero delivers a modern DevOps toolchain with pre-built Tekton pipelines. The
 
 With Kabanero, you can customize the deployment section of the pipeline to use Jenkins.
 
-In this guide, you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image. Tekton pipelines are created manually in this guide. A separate guide will address how to use automated webhooks to create and run Tekton pipelines.
+In this guide, you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image. The link:https://github.com/kabanero-io/kabanero-pipelines[kabanero-pipelines] repository contains a collection of Tekton tasks and pipelines that are intended to work out of the box with Kabanero Collections to illustrate a CI/CD workflow.
+The pipelines and tasks can be run manually or by using a webhook. This guide shows you how to use an automated webhook to create and run Tekton pipelines.
 
 The following diagram depicts the relationship and flow between Tekton and Jenkins:
 
@@ -36,10 +37,8 @@ image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="T
 == Prerequisites
 You need the following prerequisites to complete the guide:
 
-// OKD Installation - At the time this guide is written, 3.11 is the preferred version.
-* link:https://docs.okd.io/latest/install/running_install.html[OKD 3.11]
-// Kabanero Foundation
-* link:https://github.com/Kabanero-io/Kabanero-foundation[Kabanero Foundation] (cloned)
+* link:https://www.openshift.com/products/container-platform[OpenShift 4.2+] or link:https://www.okd.io/[OKD 3.11+]
+* link:https://github.com/Kabanero-io/Kabanero-foundation[Kabanero Foundation] (cloned and installed)
 // Kabanero Pipelines
 * link:https://github.com/Kabanero-io/Kabanero-pipelines[Kabanero Pipelines] (cloned)
 // Appsody Installation
@@ -48,93 +47,43 @@ You need the following prerequisites to complete the guide:
 See each project's documentation for necessary system requirements.
 
 == Intended audience
-The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins.
+The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
 
-Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
+== Build an image with Tekton using an automated webhook
 
-== Build an image with Tekton
-
-=== Create a pipeline
-The script to create a pipeline is included with the Kabanero Pipelines project. This template script contains both build and deployment tasks, but you will remove the deployment task from the file so that Tekton performs only the build task.
-
-Go to the `kabanero-pipelines` folder that you recently cloned. Find the `pipelines/incubator/build-deploy-pipeline.yaml` file, and delete the following section of the file:
-
-[source,yaml]
+. Log in as cluster-admin in the master node of your OKD cluster. The following steps assume that you are logged in as cluster-admin, and the commands are run on the master node of your OKD cluster.
+. While logged in as a cluster-admin, run the install script from the link:https://github.com/kabanero-io/kabanero-foundation[kabanero-operator release]. For example, at the time of writing this guide, the command is: 
++
 ----
-    - name: deploy-task
-      taskRef:
-        name: CollectionId-deploy-task
-      runAfter: [build-task]
-      resources:
-        inputs:
-        - name: git-source
-          resource: git-source
-        - name: docker-image
-          resource: docker-image
+curl -s -L https://github.com/kabanero-io/kabanero-operator/releases/download/0.3.2/install.sh | bash
 ----
-
-You removed the deployment task. Save and close the file. Rename the file to `test-build-pipeline.yaml`.
-
-In the `test-build-pipeline.yaml` file, update the name of the build task to `nodejs-express-build-task`. The taskRef name must be one of the tasks that is installed in the OpenShift cluster. Then, update the pipeline name to `test-build-pipeline`. After you make these changes, your file looks like following example:
-
-[source,yaml]
++
+. Create an instance of Kabanero CR by invoking the command you'll see as output near the end of the above installation script. For example, for Kabanero Foundation 0.3.2, the command is as following:
++
 ----
-apiVersion: Tekton.dev/v1alpha1
-kind: Pipeline
-metadata:
-  name: test-build-pipeline
-spec:
-  resources:
-    - name: git-source
-      type: git
-    - name: docker-image
-      type: image
-  tasks:
-    - name: build-task
-      taskRef:
-        name: nodejs-express-build-task
-      resources:
-      inputs:
-        - name: git-source
-          resource: git-source
-      outputs:
-        - name: docker-image
-          resource: docker-image
+oc apply -n kabanero -f https://raw.githubusercontent.com/kabanero-io/kabanero-operator/0.3.2/config/samples/default.yaml 
 ----
-
-Now, run the following command to create the pipeline:
++
+. Run the following command to get the Tekton Dashboard URL:
++
 ----
-oc apply -f test-build-pipeline.yaml -n Kabanero
+kubectl get routes -n tekton-pipelines
 ----
-
-In the command, the `-n` indicates the Kabanero namespace where the pipeline is created.
-
-=== Create a PipelineRun binary
-*Note:* You can use a project of your choice to complete this guide. If you don’t have a project yet, run the `appsody init nodejs-express` command to get a sample Node.js - Express application.
-
-Go to the Kabanero Foundation project that you cloned and open the `scripts/appsody-Tekton-example-manual-run.sh` file. In this file, edit the `DOCKER_IMAGE` and `APP_REPO` parameters to reflect the code repository and image repository of your choice. For this example, use the Docker repository on OpenShift.
-
-Run the following command to create a PipelineRun binary:
++
+The output looks like the following example:
++
 ----
-./appsody-Tekton-example-manual-run.sh
+NAME               HOST/PORT                                                         PATH   SERVICES           PORT           
+tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.com          tekton-dashboard   <all>   
 ----
-
-Run the following command to see the running PipelineRuns:
-----
-oc get pipelinerun
-----
-
-Run the following command to display the PipelineRun execution steps:
-----
-oc get pipelinerun -o yaml
-----
-
-If the PipelineRun fails at the `validate-collection-is-active` step, remove the `appsody/nodejs-express:<ver>` value and add the `Kabanero/nodejs-express:<ver>` value in the `appsody-config.yaml` file under the Appsody project.
-
-This problem is a known issue for projects that are created by using the `appsody-init` command.
-
-=== Create an image and push it to Docker
-Log in to your OpenShift dashboard and select the Kabanero namespace. Navigate to Overview -> Builds -> `<project-name>`, where `<project-name>` is your GitHub project name. You can now see the image that you created.
++
+. From Tekton Dashboard, go to **Webhooks** and click on the `+` next to **Add Webhook**.
+. From **Webhook Settings**, give your webhook a name, a repository URL, and access token. The webhook name can be anything. This example uses a Java MicroProfile pipeline, so your codebase should be Java MicroProfile-based. If you don't have a Java MicroProfile codebase, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a personal access token for GitHub, see link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[GitHub's documentation].
+. From **Target Pipeline Settings**, select `Kabanero` namespace, `java-microprofile-build-push-pipeline` Pipeline, `kabanero-operator` Service Account, and your OpenShift Registry URL in `image-registry.openshift-image-registry.svc:5000/<projectname>` form.
+. Go to the **PipelineRuns** tab. If you didn't already create PipelineRuns, the list is empty.
+. In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the Tekton Dashboard. 
+. Now make any code change in your repository and push the change. Wait a few moments and you can see a PipelineRun start under the **PipelineRuns** tab on your Tekton Dashboard.
+. After the PipelineRun finishes successfully, log in to your OpenShift Registry and find the new image. The image resides under a repository with the same name as your GitHub repository.
 
 == Deploy an image with Jenkins
 
@@ -156,21 +105,24 @@ Create a Jenkins (Ephemeral) instance from the OpenShift Catalog. Create a proje
 Go to Application -> Deployment in your OpenShift portal to see the successful deployment. You can also see the URL of running application by going to Application -> Deployment -> Routes.
 
 == Reference
-* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide:
+* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. The user will need to adjust these values: *envVars: [ envVar(key: 'TAG', value: 'cbc2f7c'), envVar(key: 'IMAGENAME', value: 'java-microprofile'), envVar(key: 'PROJECT', value: 'kabanero')])*
 ----
-podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'appsody-sa', containers: [
-    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat')
+podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'kabanero-pipeline', containers: [
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat',
+                      envVars: [ envVar(key: 'TAG', value: 'latest'),
+                                envVar(key: 'IMAGENAME', value: 'appsodyjava'),
+                               envVar(key: 'PROJECT', value: 'kabanero')])
   ]){
     node('label') {
         stage('Deploy') {
             container('kubectl') {
                 checkout scm
-                sh 'sed -i -e \'s#applicationImage: .*$#applicationImage: docker-registry.default.svc:5000/Kabanero/project1#g\' app-deploy.yaml'
+                sh 'sed -i -e \'s#applicationImage: .*$#applicationImage: image-registry.openshift-image-registry.svc:5000/\'$PROJECT\'/\'$IMAGENAME\':\'$TAG\'#g\' app-deploy.yaml'
                 sh 'cat app-deploy.yaml'
                 sh 'find . -name app-deploy.yaml -type f|xargs kubectl apply -f'
             }
-        }
-    }
+        }   
+    }    
 }
 ----
-* This guide has been tested on the following product versions: OpenShift 4.2 Platform, Kabanero Foundation 0.3.1, Tekton 0.7, Jenkins ver. 2.176.3
+* This guide was tested on the following product versions: OpenShift 4.2 Platform, Kabanero Foundation 0.3.1, Tekton 0.7, Jenkins ver. 2.176.3
