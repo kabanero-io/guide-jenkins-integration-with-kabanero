@@ -34,6 +34,9 @@ The following diagram depicts the relationship and flow between Tekton and Jenki
 
 image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between Tekton and Jenkins."]
 
+== Intended audience
+The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
+
 == Prerequisites
 You need the following prerequisites to complete the guide:
 
@@ -45,9 +48,6 @@ You need the following prerequisites to complete the guide:
 * link:http://appsody.dev[Appsody] (installed)
 
 See each project's documentation for necessary system requirements.
-
-== Intended audience
-The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
 
 == Build an image with Tekton using an automated webhook
 
@@ -87,10 +87,10 @@ tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.c
 
 == Deploy an image with Jenkins
 
-. Create a Jenkinsfile
+. Create a Jenkinsfile +
 Use the Jenkinsfile template from the reference section of this guide, and change the Docker Hub source to your own image repository. Push this Jenkinsfile to your GitHub repository in the root location.
 
-. Create a deploy file
+. Create a deploy file +
 On your local environment where Appsody is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
 +
 ----
@@ -99,10 +99,10 @@ appsody-deploy –-generate-only
 +
 Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using `app-deploy.yaml` file.
 
-. Create a Jenkins project and pipeline
+. Create a Jenkins project and pipeline +
 Create a Jenkins (Ephemeral) instance from the OpenShift Catalog. Create a project and specify GitHub as the source. Provide your GitHub account and repository details and choose multi-branch pipeline creation. Jenkins automatically detects the Jenkinsfile in your GitHub repository and starts the deployment process.
 
-. Verify deployment
+. Verify deployment +
 Go to Application -> Deployment in your OpenShift portal to see the successful deployment. You can also see the URL of running application by going to Application -> Deployment -> Routes.
 
 == Reference
