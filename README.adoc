@@ -100,7 +100,13 @@ appsody-deploy –-generate-only
 Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using `app-deploy.yaml` file.
 
 . Create a Jenkins project and pipeline +
-Create a Jenkins (Ephemeral) instance from the OpenShift Catalog. Create a project and specify GitHub as the source. Provide your GitHub account and repository details and choose multi-branch pipeline creation. Jenkins automatically detects the Jenkinsfile in your GitHub repository and starts the deployment process.
+Create a Jenkins (Ephemeral) instance by running the following command:
++
+----
+oc new-app jenkins-ephemeral -n kabanero
+----
++
+Then, in the OpenShift UI go to Networking > Routes, select the kabanero project and look for the jenkins URL under the Location column. Create a project and specify GitHub as the source. Provide your GitHub account and repository details and choose multi-branch pipeline creation. Jenkins automatically detects the Jenkinsfile in your GitHub repository and starts the deployment process.
 
 . Verify deployment +
 Go to Application -> Deployment in your OpenShift portal to see the successful deployment. You can also see the URL of running application by going to Application -> Deployment -> Routes.
