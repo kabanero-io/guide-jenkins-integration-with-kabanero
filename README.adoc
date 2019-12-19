@@ -109,7 +109,7 @@ oc new-app jenkins-ephemeral -n kabanero
 Next, in the OpenShift UI go to **Networking** -> **Routes**, select the Kabanero project, and find the Jenkins URL in the **Location** column. From Jenkins, create a project and specify GitHub as the source. Provide your GitHub account and repository details and choose multi-branch pipeline creation. Jenkins automatically detects the Jenkinsfile in your GitHub repository and starts the deployment process.
 
 . **Verify deployment**:
-Go to **Application** -> **Deployment** in your OpenShift portal to see the successful deployment. You can also see the URL of the running application by going to **Application** -> **Deployment** -> **Routes**.
+Go to **Networking** -> **Routes** and select the Kabanero project to see the successful deployment. You can also see the URL of the running application by going to **Networking** -> **Routes**.
 
 == Reference
 * The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. The user might need to adjust the following values: *envVars: [ envVar(key: 'TAG', value: 'latest'), envVar(key: 'IMAGENAME', value: 'java-microprofile'), envVar(key: 'PROJECT', value: 'kabanero')])*
