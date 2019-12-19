@@ -34,6 +34,9 @@ The following diagram depicts the relationship and flow between Tekton and Jenki
 
 image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between Tekton and Jenkins."]
 
+== Intended audience
+The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
+
 == Prerequisites
 You need the following prerequisites to complete the guide:
 
@@ -45,9 +48,6 @@ You need the following prerequisites to complete the guide:
 * link:http://appsody.dev[Appsody] (installed)
 
 See each project's documentation for necessary system requirements.
-
-== Intended audience
-The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
 
 == Build an image with Tekton using an automated webhook
 
