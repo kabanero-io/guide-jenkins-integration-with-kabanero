@@ -34,6 +34,9 @@ The following diagram depicts the relationship and flow between Tekton and Jenki
 
 image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between Tekton and Jenkins."]
 
+== Intended audience
+The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
+
 == Prerequisites
 You need the following prerequisites to complete the guide:
 
@@ -46,19 +49,16 @@ You need the following prerequisites to complete the guide:
 
 See each project's documentation for necessary system requirements.
 
-== Intended audience
-The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
-
 == Build an image with Tekton using an automated webhook
 
 . Log in as cluster-admin in the master node of your OKD cluster. The following steps assume that you are logged in as cluster-admin, and the commands are run on the master node of your OKD cluster.
-. While logged in as a cluster-admin, run the install script from the link:https://github.com/kabanero-io/kabanero-foundation[kabanero-operator release]. For example, at the time of writing this guide, the command is: 
+. While logged in as a cluster-admin, run the installation script from the link:https://github.com/kabanero-io/kabanero-foundation[kabanero-operator release]:
 +
 ----
 curl -s -L https://github.com/kabanero-io/kabanero-operator/releases/download/0.3.2/install.sh | bash
 ----
 +
-. Create an instance of Kabanero CR by invoking the command you'll see as output near the end of the above installation script. For example, for Kabanero Foundation 0.3.2, the command is as following:
+. Create an instance of Kabanero CR by running the command that you see as output near the end of the previous installation script. For example, run the following command for Kabanero Foundation 0.3.2:
 +
 ----
 oc apply -n kabanero -f https://raw.githubusercontent.com/kabanero-io/kabanero-operator/0.3.2/config/samples/default.yaml 
@@ -78,7 +78,7 @@ tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.c
 ----
 +
 . From Tekton Dashboard, go to **Webhooks** and click on the `+` next to **Add Webhook**.
-. From **Webhook Settings**, give your webhook a name, a repository URL, and access token. The webhook name can be anything. This example uses a Java MicroProfile pipeline, so your codebase should be Java MicroProfile-based. If you don't have a Java MicroProfile codebase, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a personal access token for GitHub, see link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[GitHub's documentation].
+. From **Webhook Settings**, give your webhook a name, repository URL, and access token. The webhook name can be anything. This example uses a Java MicroProfile pipeline, so your codebase should be Java MicroProfile-based. If you don't have a Java MicroProfile codebase, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a personal access token for GitHub, see link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[GitHub's documentation].
 . From **Target Pipeline Settings**, select `Kabanero` namespace, `java-microprofile-build-push-pipeline` Pipeline, `kabanero-operator` Service Account, and your OpenShift Registry URL in `image-registry.openshift-image-registry.svc:5000/<projectname>` form.
 . Go to the **PipelineRuns** tab. If you didn't already create PipelineRuns, the list is empty.
 . In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the Tekton Dashboard. 
@@ -87,26 +87,26 @@ tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.c
 
 == Deploy an image with Jenkins
 
-. Create a Jenkinsfile
+. **Create a Jenkinsfile**:
 Use the Jenkinsfile template from the reference section of this guide, and change the Docker Hub source to your own image repository. Push this Jenkinsfile to your GitHub repository in the root location.
 
-. Create a deploy file
+. **Create a deploy file**:
 On your local environment where Appsody is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
 +
 ----
 appsody-deploy –-generate-only
 ----
 +
-Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using `app-deploy.yaml` file.
+Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using the `app-deploy.yaml` file.
 
-. Create a Jenkins project and pipeline
+. **Create a Jenkins project and pipeline**:
 Create a Jenkins (Ephemeral) instance from the OpenShift Catalog. Create a project and specify GitHub as the source. Provide your GitHub account and repository details and choose multi-branch pipeline creation. Jenkins automatically detects the Jenkinsfile in your GitHub repository and starts the deployment process.
 
-. Verify deployment
-Go to Application -> Deployment in your OpenShift portal to see the successful deployment. You can also see the URL of running application by going to Application -> Deployment -> Routes.
+. **Verify deployment**:
+Go to **Application** -> **Deployment** in your OpenShift portal to see the successful deployment. You can also see the URL of the running application by going to **Application** -> **Deployment** -> **Routes**.
 
 == Reference
-* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. The user might need to adjust these values: *envVars: [ envVar(key: 'TAG', value: 'latest'), envVar(key: 'IMAGENAME', value: 'java-microprofile'), envVar(key: 'PROJECT', value: 'kabanero')])*
+* The following file is a sample Jenkinsfile that you can use to set up your initial Jenkinsfile for the guide. The user might need to adjust the following values: *envVars: [ envVar(key: 'TAG', value: 'latest'), envVar(key: 'IMAGENAME', value: 'java-microprofile'), envVar(key: 'PROJECT', value: 'kabanero')])*
 ----
 podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'kabanero-pipeline', containers: [
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat',
