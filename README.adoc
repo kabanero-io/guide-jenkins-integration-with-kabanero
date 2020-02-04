@@ -84,6 +84,7 @@ tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.c
 . In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the Tekton Dashboard. 
 . Now make any code change in your repository and push the change. Wait a few moments and you can see a PipelineRun start under the **PipelineRuns** tab on your Tekton Dashboard.
 . After the PipelineRun finishes successfully, log in to your OpenShift Registry and find the new image. The image resides under a repository with the same name as your GitHub repository. Note: Kabanero Pipelines will use Project Name as the image name and latest git commit id as the tag; by design.
+* Note: If you use an external image registry, you'll have to configure the secrets under Tekton Dashboard and you'll find the image under that external image registry.
 
 == Deploy an image with Jenkins
 
@@ -94,7 +95,7 @@ Use the Jenkinsfile template from the reference section of this guide, and chang
 On your local environment where Appsody is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
 +
 ----
-appsody-deploy –-generate-only
+appsody deploy
 ----
 +
 Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using the `app-deploy.yaml` file.
