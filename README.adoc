@@ -21,50 +21,50 @@ permalink: /guides/jenkins-integration-with-kabanero/
 :page-description: Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 :page-tags: ['Tekton', 'Jenkins', 'CI/CD', 'Pipeline', 'Kabanero']
 :page-guide-category: collections
-= Jenkins integration with Kabanero
+= Jenkins integration
 
-Kabanero delivers a modern DevOps toolchain with pre-built Tekton pipelines. The Tekton open source project provides Kubernetes-style resources for declaring CI/CD-style pipelines. While it is advantageous to run both CI and CD with Tekton to leverage the power of Kubernetes, some might want to reuse Jenkins assets or skills.
+The product delivers a modern DevOps toolchain with pre-built pipelines. Kubernetes-style resources are provided for declaring CI/CD-style pipelines. While it is advantageous to run both CI and CD style pipelines leverage the power of Kubernetes, some might want to reuse Jenkins assets or skills.
 
-With Kabanero, you can customize the deployment section of the pipeline to use Jenkins.
+With the product, you can customize the deployment section of the pipeline to use Jenkins.
 
-In this guide, you will learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image. The link:https://github.com/kabanero-io/kabanero-pipelines[kabanero-pipelines] repository contains a collection of Tekton tasks and pipelines that are intended to work out of the box with Kabanero Collections to illustrate a CI/CD workflow.
-The pipelines and tasks can be run manually or by using a webhook. This guide shows you how to use an automated webhook to create and run Tekton pipelines.
+In this guide, you will learn how to build an image and how to use Jenkins to deploy an application that uses that image. The link:https://github.com/kabanero-io/kabanero-pipelines[kabanero-pipelines] repository contains a collection of tasks and pipelines that are intended to work out of the box with application stacks to illustrate a CI/CD workflow.
+The pipelines and tasks can be run manually or by using a webhook. This guide shows you how to use an automated webhook to create and run pipelines.
 
-The following diagram depicts the relationship and flow between Tekton and Jenkins:
+The following diagram depicts the relationship and flow between the pipeline and Jenkins:
 
-image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between Tekton and Jenkins."]
+image::/img/guide/jenkins-tekton.png[link="/img/guide/jenkins-tekton.png" alt="This diagram depicts the relationship and flow between the pipeline and Jenkins."]
 
 == Intended audience
-The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with Tekton and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and Tekton.
+The purpose of the guide is to show an existing Jenkins user or administrator how to build an image with the pipeline and how to deploy an image with Jenkins. Users should have experience with Jenkins and be familiar with the fundamental concepts of microservices, Docker, Kubernetes, and pipelines.
 
 == Prerequisites
 You need the following prerequisites to complete the guide:
 
 * link:https://www.openshift.com/products/container-platform[OpenShift 4.2+] or link:https://www.okd.io/[OKD 3.11+]
 * link:https://github.com/Kabanero-io/Kabanero-foundation[Kabanero Foundation] (cloned and installed)
-// Kabanero Pipelines
-* link:https://github.com/Kabanero-io/Kabanero-pipelines[Kabanero Pipelines] (cloned)
+// Pipelines
+* link:https://github.com/Kabanero-io/Kabanero-pipelines[Pipelines] (cloned)
 // Appsody Installation
 * link:http://appsody.dev[Appsody] (installed)
 
 See each project's documentation for necessary system requirements.
 
-== Build an image with Tekton using an automated webhook
+== Build an image with an automated webhook
 
-. Log in as cluster-admin in the master node of your OKD cluster. The following steps assume that you are logged in as cluster-admin, and the commands are run on the master node of your OKD cluster.
-. While logged in as a cluster-admin, run the installation script from the link:https://github.com/kabanero-io/kabanero-foundation[kabanero-operator release]:
+. Log in as cluster-admin in the master node of your Kubernetes cluster. The following steps assume that you are logged in as cluster-admin, and the commands are run on the master node of your Kubernetes cluster.
+. While you are logged in as a cluster-admin, run the installation script from the link:https://github.com/kabanero-io/kabanero-foundation[kabanero-operator release]:
 +
 ----
 curl -s -L https://github.com/kabanero-io/kabanero-operator/releases/download/0.3.2/install.sh | bash
 ----
 +
-. Create an instance of Kabanero CR by running the command that you see as output near the end of the previous installation script. For example, run the following command for Kabanero Foundation 0.3.2:
+. Create an instance of Kabanero CR by running the command that you see as output near the end of the previous installation script. For example, run the following command:
 +
 ----
 oc apply -n kabanero -f https://raw.githubusercontent.com/kabanero-io/kabanero-operator/0.3.2/config/samples/default.yaml 
 ----
 +
-. Run the following command to get the Tekton Dashboard URL:
+. Run the following command to get the pipelines dashboard URL:
 +
 ----
 kubectl get routes -n tekton-pipelines
@@ -77,12 +77,12 @@ NAME               HOST/PORT                                                    
 tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.com          tekton-dashboard   <all>   
 ----
 +
-. From Tekton Dashboard, go to **Webhooks** and click on the `+` next to **Add Webhook**.
+. From the pipelines dashboard, go to **Webhooks** and click on the `+` next to **Add Webhook**.
 . From **Webhook Settings**, give your webhook a name, repository URL, and access token. The webhook name can be anything. This example uses a Java MicroProfile pipeline, so your codebase should be Java MicroProfile-based. If you don't have a Java MicroProfile codebase, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a personal access token for GitHub, see link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[GitHub's documentation].
 . From **Target Pipeline Settings**, select `Kabanero` namespace, `java-microprofile-build-push-pipeline` Pipeline, `kabanero-operator` Service Account, and your OpenShift Registry URL in `image-registry.openshift-image-registry.svc:5000/<projectname>` form.
 . Go to the **PipelineRuns** tab. If you didn't already create PipelineRuns, the list is empty.
-. In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the Tekton Dashboard. 
-. Now make any code change in your repository and push the change. Wait a few moments and you can see a PipelineRun start under the **PipelineRuns** tab on your Tekton Dashboard.
+. In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the the pipelines dashboard. 
+. Now make any code change in your repository and push the change. Wait a few moments and you can see a PipelineRun start under the **PipelineRuns** tab on your the pipelines dashboard.
 . After the PipelineRun finishes successfully, log in to your OpenShift Registry and find the new image. The image resides under a repository with the same name as your GitHub repository.
 
 == Deploy an image with Jenkins
@@ -91,13 +91,13 @@ tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.c
 Use the Jenkinsfile template from the reference section of this guide, and change the Docker Hub source to your own image repository. Push this Jenkinsfile to your GitHub repository in the root location.
 
 . **Create a deploy file**:
-On your local environment where Appsody is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
+On your local environment where your development application is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
 +
 ----
 appsody-deploy –-generate-only
 ----
 +
-Other tools, including Jenkins, can use this file for application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses Appsody to deploy the application by using the `app-deploy.yaml` file.
+Other tools, including Jenkins, can use this file for development application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses your application to deploy the application by using the `app-deploy.yaml` file.
 
 . **Create a Jenkins project and pipeline**:
 Create a Jenkins (Ephemeral) instance by running the following command:
