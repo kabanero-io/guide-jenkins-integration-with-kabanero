@@ -94,7 +94,7 @@ Use the Jenkinsfile template from the reference section of this guide, and chang
 On your local environment where your development application is installed, go to your project folder and run the following command to generate an `app-deploy.yaml` file:
 +
 ----
-appsody-deploy –-generate-only
+appsody build
 ----
 +
 Other tools, including Jenkins, can use this file for development application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses your application to deploy the application by using the `app-deploy.yaml` file.
