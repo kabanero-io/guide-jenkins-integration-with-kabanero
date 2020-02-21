@@ -20,7 +20,7 @@ permalink: /guides/jenkins-integration-with-kabanero/
 :page-releasedate: 2019-12-18
 :page-description: Learn how to use Tekton to build an image and how to use Jenkins to deploy an application that uses that image.
 :page-tags: ['Tekton', 'Jenkins', 'CI/CD', 'Pipeline', 'Kabanero']
-:page-guide-category: collections
+:page-guide-category: pipelines
 = Jenkins integration
 
 The product delivers a modern DevOps toolchain with pre-built pipelines. Kubernetes-style resources are provided for declaring CI/CD-style pipelines. While it is advantageous to run both CI and CD style pipelines to leverage the power of Kubernetes, some might want to reuse Jenkins assets or skills.
@@ -61,7 +61,7 @@ curl -s -L https://github.com/kabanero-io/kabanero-operator/releases/download/0.
 . Create an instance of Kabanero CR by running the command that you see as output near the end of the previous installation script. For example, run the following command:
 +
 ----
-oc apply -n kabanero -f https://raw.githubusercontent.com/kabanero-io/kabanero-operator/0.3.2/config/samples/default.yaml 
+oc apply -n kabanero -f https://raw.githubusercontent.com/kabanero-io/kabanero-operator/0.3.2/config/samples/default.yaml
 ----
 +
 . Run the following command to get the pipelines dashboard URL:
@@ -73,15 +73,15 @@ kubectl get routes -n tekton-pipelines
 The output looks like the following example:
 +
 ----
-NAME               HOST/PORT                                                         PATH   SERVICES           PORT           
-tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.com          tekton-dashboard   <all>   
+NAME               HOST/PORT                                                         PATH   SERVICES           PORT
+tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.com          tekton-dashboard   <all>
 ----
 +
 . From the pipelines dashboard, go to **Webhooks** and click on the `+` next to **Add Webhook**.
 . From **Webhook Settings**, give your webhook a name, repository URL, and access token. The webhook name can be anything. This example uses a Java MicroProfile pipeline, so your codebase should be Java MicroProfile-based. If you don't have a Java MicroProfile codebase, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a personal access token for GitHub, see link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[GitHub's documentation].
 . From **Target Pipeline Settings**, select `Kabanero` namespace, `java-microprofile-build-push-pipeline` Pipeline, `kabanero-pipeline` Service Account, and your OpenShift Registry URL in `image-registry.openshift-image-registry.svc:5000/<projectname>` form.
 . Go to the **PipelineRuns** tab. If you didn't already create PipelineRuns, the list is empty.
-. In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the the pipelines dashboard. 
+. In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the the pipelines dashboard.
 . Now make any code change in your repository and push the change. Wait a few moments and you can see a PipelineRun start under the **PipelineRuns** tab on your the pipelines dashboard.
 . After the PipelineRun finishes successfully, log in to your OpenShift Registry and find the new image. The image resides under a repository with the same name as your GitHub repository.
 
@@ -128,8 +128,8 @@ podTemplate(label: 'label', cloud: 'openshift', serviceAccount: 'kabanero-pipeli
                 sh 'cat app-deploy.yaml'
                 sh 'find . -name app-deploy.yaml -type f|xargs kubectl apply -f'
             }
-        }   
-    }    
+        }
+    }
 }
 ----
 * This guide was tested on the following product versions: OpenShift 4.2 Platform, Kabanero Foundation 0.3.1, Tekton 0.7, Jenkins ver. 2.176.3
