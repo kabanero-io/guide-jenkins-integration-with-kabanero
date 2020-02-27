@@ -79,7 +79,7 @@ tekton-dashboard   tekton-dashboard-tekton-pipelines.apps.kabanero.os.fyre.ibm.c
 +
 . From the pipelines dashboard, go to **Webhooks** and click on the `+` next to **Add Webhook**.
 . From **Webhook Settings**, give your webhook a name, repository URL, and access token. The webhook name can be anything. This example uses a Java MicroProfile pipeline, so your codebase should be Java MicroProfile-based. If you don't have a Java MicroProfile codebase, you can fork link:https://github.com/dewan-ahmed/java-microprofile[this repo]. To learn how to create a personal access token for GitHub, see link:https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line[GitHub's documentation].
-. From **Target Pipeline Settings**, select `Kabanero` namespace, `java-microprofile-build-push-pipeline` Pipeline, `kabanero-pipeline` Service Account, and your OpenShift Registry URL in `image-registry.openshift-image-registry.svc:5000/<projectname>` form.
+. From **Target Pipeline Settings**, select `Kabanero` namespace, `java-microprofile-build-push-jk-pl` Pipeline, `kabanero-pipeline` Service Account, and your OpenShift Registry URL in `image-registry.openshift-image-registry.svc:5000/<projectname>` form.
 . Go to the **PipelineRuns** tab. If you didn't already create PipelineRuns, the list is empty.
 . In GitHub, go to **Settings** -> **Webhooks**. You can see your new webhook, which was created by the the pipelines dashboard.
 . Now make any code change in your repository and push the change. Wait a few moments and you can see a PipelineRun start under the **PipelineRuns** tab on your the pipelines dashboard.
