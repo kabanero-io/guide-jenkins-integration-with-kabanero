@@ -97,7 +97,14 @@ On your local environment where your development application is installed, go to
 appsody build
 ----
 +
-Other tools, including Jenkins, can use this file for development application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses your application to deploy the application by using the `app-deploy.yaml` file.
+Other tools, including Jenkins, can use this file for development application deployment. Commit and push this file to the root of your project. Jenkins creates the `AppsodyApplication` resource in the OpenShift cluster and uses your application to deploy the application by using the `app-deploy.yaml` file.  Update `app-deploy.yaml` file with your desired image name to match the `IMAGENAME` envVar in the Jenkinsfile you will create below.
++
+----
+metadata:
+  name: java-microprofile
+spec:
+----
++
 
 . **Create a Jenkins project and pipeline**:
 Create a Jenkins (Ephemeral) instance by running the following command:
